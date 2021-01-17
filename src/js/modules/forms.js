@@ -1,6 +1,7 @@
 import {timeout,showModalByScroll} from "./modals"
+import checkNumInputs from "./checkNumInputs"
 
-const forms = () => {
+const forms = (state) => {
     const form = document.querySelectorAll('form'),
           inputs = document.querySelectorAll('input'),
           phoneInputs = document.querySelectorAll("input[name='user_phone']"),
@@ -10,11 +11,8 @@ const forms = () => {
             fail:"Ой! Щось не так :( "
         };
     
-    phoneInputs.forEach(phone => {
-        phone.addEventListener("input",() => {
-            phone.value =phone.value.replace(/\D/,"") // Якщо в полі для вводу номеру є літери то заміняєм іх на пустий рядок
-        })
-    })
+    checkNumInputs("input[name='user_phone']")
+
     const postData = async (url,data) => {
         const load =  document.querySelector('.status')
         const loadMessage = document.createElement('img')
@@ -46,6 +44,11 @@ const forms = () => {
             statusMessage.classList.add('status')
             item.appendChild(statusMessage) 
             const formData = new FormData(item)
+            if (item.getAttribute('data-calc') === 'end') { /* Якщо форма-калькулятор то добавляєм ще дані */
+                for(let key in state) {
+                    formData.append(key,state[key])
+                }
+                        }
 
             postData('assets/server.php',formData)
             .then(res =>{

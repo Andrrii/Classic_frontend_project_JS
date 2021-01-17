@@ -12,7 +12,7 @@ gulp.task("copy-html", () => {
                 .pipe(browsersync.stream());
 });
 
-gulp.task("build-js", () => {
+gulp.task("build-js",async () => {
     return gulp.src("./src/js/main.js")
                 .pipe(webpack({
                     mode: 'development',
@@ -45,12 +45,12 @@ gulp.task("build-js", () => {
 });
 
 gulp.task("copy-assets", () => {
-    return gulp.src("./src/assets/**/*.*")
-                .pipe(gulp.dest(dist + "/assets"))
+    return gulp.src("./src/assets/.*/*.*")
+                .pipe(gulp.dest(dist + "/assets",{"mode": "0777"}))
                 .on("end", browsersync.reload);
 });
 
-gulp.task("watch", () => {
+gulp.task("watch", async () => {
     browsersync.init({
 		server: "./dist/",
 		port: 4000,
@@ -64,7 +64,7 @@ gulp.task("watch", () => {
 
 gulp.task("build", gulp.parallel("copy-html", "copy-assets", "build-js"));
 
-gulp.task("build-prod-js", () => {
+gulp.task("build-prod-js",  () => {
     return gulp.src("./src/js/main.js")
                 .pipe(webpack({
                     mode: 'production',
@@ -92,4 +92,4 @@ gulp.task("build-prod-js", () => {
                 .pipe(gulp.dest(dist));
 });
 
-gulp.task("default", gulp.parallel("watch", "build"));
+gulp.task("default", gulp.parallel(/*"watch",*/ "build"));
