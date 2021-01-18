@@ -1,10 +1,11 @@
 
 
 // При натисненні на кнопку " Вызвать замерщика " відкривається мод. вікно
-function openModal(selector) {
+function openModal(selector,scroll) {
     const modal = document.querySelector(selector)
     modal.style.display = "block"
     document.body.style.overflow = "hidden"
+    document.body.style.marginRight = `${scroll}px`
     // use bootstrap class
     //document.body.classList.add('modal-open')
     clearTimeout(timeout)
@@ -16,7 +17,8 @@ const modals = () => {
         const trigger = document.querySelectorAll(triggerSelector),
               modal = document.querySelector(modalSelector),
               close = document.querySelector(closeSelector),
-              windows = document.querySelectorAll('[data-modal]');
+              windows = document.querySelectorAll('[data-modal]'),
+              scroll = calcScroll();
         
         trigger.forEach(item => {
             item.addEventListener("click" , (event) => {
@@ -26,7 +28,7 @@ const modals = () => {
                 windows.forEach(window => {
                     window.style.display = 'none'
                 })
-                openModal(modalSelector)
+                openModal(modalSelector,scroll)
             })
         });
         close.addEventListener('click', () => {
@@ -35,6 +37,7 @@ const modals = () => {
             })
             modal.style.display = "none"
             document.body.style.overflow = ""
+            document.body.style.marginRight = `0px`
             // use bootstrap class
             //document.body.classList.remove('modal-open')
 
@@ -42,12 +45,13 @@ const modals = () => {
 
 
         modal.addEventListener('click' , (e) => {
-            if( e.target === modal && closeClickOverlay) /* Якщо клікаєм за межі св=амого модального вікна */ {
+            if( e.target === modal && closeClickOverlay) /* Якщо клікаєм за межі самого модального вікна */ {
                 windows.forEach(window => {
                     window.style.display = 'none'
                 })
                 modal.style.display = "none"
                 document.body.style.overflow = ""
+                document.body.style.marginRight = `0px`
             // use bootstrap class
             //document.body.classList.remove('modal-open')
 
@@ -55,8 +59,22 @@ const modals = () => {
         })
     }
 
-    
-    
+    function calcScroll(){ /* Коли викликаєм модальне вікно то скрол заміняється на пустий блок  */
+        let div = document.createElement('div')
+
+        div.style.width = "50px"
+        div.style.height = "50px"
+        div.style.overflowY = "scroll"
+        div.style.visibility = "hidden"
+
+        document.body.appendChild(div)
+
+        let scrollWidth = div.offsetWidth-div.clientWidth; // -- Отримуєм ширину прокрутки 
+        
+        div.remove()
+        return scrollWidth;
+
+    }
 
 
     bindModal('.popup_engineer_btn','.popup_engineer',".popup_engineer .popup_close")
@@ -77,13 +95,13 @@ const showModalByScroll = function  () {
         if (  /* подивитись урок 42 */
             window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) 
         {
-        const bottomModalTimerId = setTimeout( () => openModal('.popup_engineer'),2500)
+        const bottomModalTimerId = setTimeout( () => openModal('.popup_engineer',scroll),2500)
             //    console.log(bottomModalTimerId)
             //    clearInterval(bottomModalTimerId)
         }
     }
 const timeout = setTimeout(() => {
-    openModal('.popup_engineer')
+    openModal('.popup_engineer',scroll)
 }, 60000);
 export default modals
 export {timeout,showModalByScroll}

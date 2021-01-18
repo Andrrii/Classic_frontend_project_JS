@@ -10,7 +10,9 @@ window.addEventListener('DOMContentLoaded', () => {
 "use strict"
    
     let deadline = "2021-03-25"
-    let modalState = {} /* в калькулятора є 3 форми */
+    let modalState = {
+        
+    } /* в калькулятора є 3 форми */
     changeModalState(modalState)
 
 

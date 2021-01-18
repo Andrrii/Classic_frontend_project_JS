@@ -5,6 +5,7 @@ const forms = (state) => {
     const form = document.querySelectorAll('form'),
           inputs = document.querySelectorAll('input'),
           phoneInputs = document.querySelectorAll("input[name='user_phone']"),
+          windows = document.querySelectorAll('[data-modal]'),
           message ={
             loading : "assets/img/forms/spinner.svg",
             success: "Дякуємо ! Найбижчим часом  ми   зателефонуємо вам",
@@ -62,10 +63,22 @@ const forms = (state) => {
             }).finally(() => {
                 clearInput()
                 setTimeout(() => {
+                    statusMessage.remove()
+                } ,2000)
                     
-                    statusMessage.remove()} ,2000)
-                })
-
+                if (item.getAttribute('data-calc') === 'end') {
+                    setTimeout(() => {   
+                    windows.forEach(window => {
+                        window.style.display = 'none'
+                    })
+                    document.body.style.overflow = ""
+                    document.body.style.marginRight = `0px` },3500)
+                  
+                  for (const prop of Object.getOwnPropertyNames(state)) {
+                    delete state[prop];
+                  }
+                } 
+            })        
         })
     })
 

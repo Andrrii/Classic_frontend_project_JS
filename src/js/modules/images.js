@@ -7,9 +7,11 @@ const images = () => { // Збільшуєм зображення при клі�
     imgPopup.classList.add('popup')
     workSection.appendChild(imgPopup)
 
+    bigImage.style.width = "600px"
+    bigImage.style.height = "600px"
     imgPopup.style.justifyContent = 'center' // {   Вирівнюєм
     imgPopup.style.alignItems = 'center'      //              строго по центру  }
-
+    
     imgPopup.style.display = 'none'
 
     imgPopup.appendChild(bigImage)
