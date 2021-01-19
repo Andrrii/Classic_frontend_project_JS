@@ -18880,16 +18880,55 @@ window.addEventListener('DOMContentLoaded', function () {
 /*!********************************************!*\
   !*** ./src/js/modules/changeModalState.js ***!
   \********************************************/
-/*! exports provided: default */
+/*! exports provided: default, postStaticToElems */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "postStaticToElems", function() { return postStaticToElems; });
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _checkNumInputs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./checkNumInputs */ "./src/js/modules/checkNumInputs.js");
 
 
+
+function postStaticToElems(state, btnCalcValidate, elem, prop) {
+  var i = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+
+  switch (elem[0].nodeName) {
+    // Оскільки багато різних типів форми то юзаєм switch
+    case "SPAN":
+      state[prop] = i; // Дивитись урок 007
+
+      break;
+
+    case "INPUT":
+      if (elem[0].getAttribute('type') === 'checkbox') {
+        i === 0 ? state[prop] = "Cold" : state[prop] = "Warm";
+        elem.forEach(function (box, j) {
+          /* User може вибрати тільки один radiobutton */
+          box.checked = false;
+
+          if (+i == +j) {
+            box.checked = true;
+          }
+        });
+      } else {
+        btnCalcValidate.setAttribute("disabled", "true");
+        state[prop] = ""; // Дивитись урок 007
+      }
+
+      break;
+
+    case "SELECT":
+      state[prop] = elem[0].value; // Дивитись урок 007
+
+      break;
+  }
+
+  console.log(state);
+  return;
+}
 
 var changeModalState = function changeModalState(state) {
   var windowForm = document.querySelectorAll('.balcon_icons_img'),
@@ -18898,45 +18937,24 @@ var changeModalState = function changeModalState(state) {
       windowType = document.querySelectorAll('#view_type'),
       btnCalcValidate = document.querySelector(".popup_calc_button"),
       windowProfile = document.querySelectorAll('.checkbox');
-  Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_1__["default"])('#width');
-  Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_1__["default"])('#height');
-
-  function postStaticToElems(elem, prop) {
-    var i = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-
-    switch (elem[0].nodeName) {
-      // Оскільки багато різних типів форми то юзаєм switch
-      case "SPAN":
-        state[prop] = i; // Дивитись урок 007
-
-        break;
-
-      case "INPUT":
-        if (elem[0].getAttribute('type') === 'checkbox') {
-          i === 0 ? state[prop] = "Cold" : state[prop] = "Warm";
-          elem.forEach(function (box, j) {
-            /* User може вибрати тільки один radiobutton */
-            box.checked = false;
-
-            if (+i == +j) {
-              box.checked = true;
-            }
-          });
-        } else {
-          btnCalcValidate.setAttribute("disabled", "true");
-          state[prop] = ""; // Дивитись урок 007
-        }
-
-        break;
-
-      case "SELECT":
-        state[prop] = elem[0].value; // Дивитись урок 007
-
-        break;
-    }
-
-    console.log(state);
-  }
+  var trigger = document.querySelectorAll(".popup_calc_btn");
+  trigger.forEach(function (item) {
+    item.addEventListener("click", function (event) {
+      postStaticToElems(state, btnCalcValidate, windowForm, 'form');
+      postStaticToElems(state, btnCalcValidate, windowHeight, 'height');
+      postStaticToElems(state, btnCalcValidate, windowWidth, 'width');
+      postStaticToElems(state, btnCalcValidate, windowType, 'type');
+      postStaticToElems(state, btnCalcValidate, windowProfile, 'profile');
+      var div = document.createElement('div');
+      div.classList.add('testing');
+      div.style.display = "block";
+      div.innerHTML = "Не введені всі значення";
+      div.style.marginTop = "10px";
+      div.style.marginBottom = "15px";
+      div.style.color = "red";
+      btnCalcValidate.before(div);
+    });
+  });
 
   function bindActionToElems(event, elem, prop) {
     elem.forEach(function (item, i) {
@@ -18960,12 +18978,28 @@ var changeModalState = function changeModalState(state) {
                 }
               });
             } else {
+              Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_1__["default"])('#width');
+              Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_1__["default"])('#height');
+              var div = document.querySelector('.testing');
               state[prop] = item.value;
 
               if (state[prop] == "" || item.value == null) {
+                if (!div) {
+                  div = document.createElement('div');
+                  div.classList.add('testing');
+                  div.style.display = "block";
+                  div.innerHTML = "Не введені всі значення";
+                  div.style.marginTop = "10px";
+                  div.style.marginBottom = "15px";
+                  div.style.color = "red";
+                  btnCalcValidate.before(div);
+                }
+
+                btnCalcValidate.before(div);
                 btnCalcValidate.setAttribute("disabled", "true");
-              } else if (state['height'] && state['width']) {
+              } else if (state['height'] != "" && state['width'] != "") {
                 btnCalcValidate.removeAttribute("disabled");
+                div.remove();
               }
             }
 
@@ -18982,11 +19016,6 @@ var changeModalState = function changeModalState(state) {
     });
   }
 
-  postStaticToElems(windowForm, 'form');
-  postStaticToElems(windowHeight, 'height');
-  postStaticToElems(windowWidth, 'width');
-  postStaticToElems(windowType, 'type');
-  postStaticToElems(windowProfile, 'profile');
   bindActionToElems('click', windowForm, 'form');
   bindActionToElems('input', windowHeight, 'height');
   bindActionToElems('input', windowWidth, 'width');
@@ -18995,6 +19024,7 @@ var changeModalState = function changeModalState(state) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (changeModalState);
+
 
 /***/ }),
 
@@ -19062,6 +19092,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var _modals__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modals */ "./src/js/modules/modals.js");
 /* harmony import */ var _checkNumInputs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./checkNumInputs */ "./src/js/modules/checkNumInputs.js");
+/* harmony import */ var _changeModalState__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./changeModalState */ "./src/js/modules/changeModalState.js");
+
 
 
 
@@ -19087,6 +19119,8 @@ var forms = function forms(state) {
     success: "Дякуємо ! Найбижчим часом  ми   зателефонуємо вам",
     fail: "Ой! Щось не так :( "
   };
+  var windowForm = document.querySelectorAll('.balcon_icons_img'),
+      btnCalcValidate = document.querySelector(".popup_calc_button");
   Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_13__["default"])("input[name='user_phone']");
 
   var postData = function postData(url, data) {
@@ -19173,7 +19207,8 @@ var forms = function forms(state) {
             for (var _iterator = Object.getOwnPropertyNames(state)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
               var prop = _step.value;
               delete state[prop];
-            }
+            } //postStaticToElems(state,btnCalcValidate,windowForm,'form')
+
           } catch (err) {
             _didIteratorError = true;
             _iteratorError = err;
@@ -19270,7 +19305,7 @@ function openModal(selector, scroll) {
   window.removeEventListener('scroll', showModalByScroll);
 }
 
-var modals = function modals() {
+var modals = function modals(state) {
   function bindModal(triggerSelector, modalSelector, closeSelector) {
     var closeClickOverlay = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
     var trigger = document.querySelectorAll(triggerSelector),

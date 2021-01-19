@@ -1,5 +1,6 @@
 import {timeout,showModalByScroll} from "./modals"
 import checkNumInputs from "./checkNumInputs"
+import postStaticToElems from "./changeModalState"
 
 const forms = (state) => {
     const form = document.querySelectorAll('form'),
@@ -11,6 +12,10 @@ const forms = (state) => {
             success: "Дякуємо ! Найбижчим часом  ми   зателефонуємо вам",
             fail:"Ой! Щось не так :( "
         };
+    const windowForm = document.querySelectorAll('.balcon_icons_img'),
+    
+    btnCalcValidate = document.querySelector(".popup_calc_button");
+    
     
     checkNumInputs("input[name='user_phone']")
 
@@ -77,8 +82,14 @@ const forms = (state) => {
                   for (const prop of Object.getOwnPropertyNames(state)) {
                     delete state[prop];
                   }
+                  //postStaticToElems(state,btnCalcValidate,windowForm,'form')
+
                 } 
+                    
+                        
+                
             })        
+            
         })
     })
 

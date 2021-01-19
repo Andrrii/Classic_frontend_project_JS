@@ -1,5 +1,4 @@
 
-
 // При натисненні на кнопку " Вызвать замерщика " відкривається мод. вікно
 function openModal(selector,scroll) {
     const modal = document.querySelector(selector)
@@ -11,7 +10,7 @@ function openModal(selector,scroll) {
     clearTimeout(timeout)
     window.removeEventListener('scroll',showModalByScroll)
 }
-const modals = () => {
+const modals = (state) => {
     
     function bindModal(triggerSelector,modalSelector,closeSelector,closeClickOverlay = true) {
         const trigger = document.querySelectorAll(triggerSelector),
@@ -20,14 +19,18 @@ const modals = () => {
               windows = document.querySelectorAll('[data-modal]'),
               scroll = calcScroll();
         
+        
         trigger.forEach(item => {
             item.addEventListener("click" , (event) => {
                 if (event.target) {
                     event.preventDefault() //  
+                    
+                        
                 }
                 windows.forEach(window => {
                     window.style.display = 'none'
                 })
+                
                 openModal(modalSelector,scroll)
             })
         });
