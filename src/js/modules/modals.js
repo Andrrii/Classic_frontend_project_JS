@@ -10,6 +10,22 @@ function openModal(selector,scroll) {
     clearTimeout(timeout)
     window.removeEventListener('scroll',showModalByScroll)
 }
+function calcScroll(){ /* Коли викликаєм модальне вікно то скрол заміняється на пустий блок  */
+    let div = document.createElement('div')
+
+    div.style.width = "50px"
+    div.style.height = "50px"
+    div.style.overflowY = "scroll"
+    div.style.visibility = "hidden"
+
+    document.body.appendChild(div)
+
+    let scrollWidth = div.offsetWidth-div.clientWidth; // -- Отримуєм ширину прокрутки 
+    
+    div.remove()
+    return scrollWidth;
+
+}
 const modals = (state) => {
     
     function bindModal(triggerSelector,modalSelector,closeSelector,closeClickOverlay = true) {
@@ -62,30 +78,15 @@ const modals = (state) => {
         })
     }
 
-    function calcScroll(){ /* Коли викликаєм модальне вікно то скрол заміняється на пустий блок  */
-        let div = document.createElement('div')
+    
 
-        div.style.width = "50px"
-        div.style.height = "50px"
-        div.style.overflowY = "scroll"
-        div.style.visibility = "hidden"
-
-        document.body.appendChild(div)
-
-        let scrollWidth = div.offsetWidth-div.clientWidth; // -- Отримуєм ширину прокрутки 
-        
-        div.remove()
-        return scrollWidth;
-
-    }
-
-
+    window.addEventListener('scroll', showModalByScroll)
     bindModal('.popup_engineer_btn','.popup_engineer',".popup_engineer .popup_close")
     bindModal('.phone_link','.popup',".popup .popup_close")
     
     
     
-    window.addEventListener('scroll', showModalByScroll)
+   
 
     bindModal(".popup_calc_btn",".popup_calc",".popup_calc_close") // calculator
     bindModal('.popup_calc_button','.popup_calc_profile','.popup_calc_profile_close',false) //next modal after calc
@@ -107,4 +108,4 @@ const timeout = setTimeout(() => {
     openModal('.popup_engineer',scroll)
 }, 60000);
 export default modals
-export {timeout,showModalByScroll}
+export {timeout,showModalByScroll,calcScroll}

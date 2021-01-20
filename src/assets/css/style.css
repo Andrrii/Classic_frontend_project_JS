@@ -500,9 +500,15 @@ textarea:focus {
   display: none;
 }
 
-.glazing a.active {
+.glazing-a-active {
   text-decoration: none;
   color: #454545;
+  border-top: 1rem solid #0089cd;
+  height: 8rem;
+  padding: 2rem 0;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ebebeb), color-stop(0%, #ebebeb), to(rgba(255, 255, 255, 0)));
+  background: linear-gradient(180deg, #ebebeb 0%, #ebebeb 0%, rgba(255, 255, 255, 0) 100%);
+
 }
 
 /*Decoration*/

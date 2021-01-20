@@ -1,10 +1,13 @@
+import {calcScroll} from "./modals"
+
+
 const images = () => { // Збільшуєм зображення при кліку на них
 
     const imgPopup = document.createElement('div'),
           workSection = document.querySelector('.works'),
-          bigImage = document.createElement('img');
-
-    imgPopup.classList.add('popup')
+          bigImage = document.createElement('img'),
+          scroll = calcScroll();
+    imgPopup.classList.add('popup','faded')
     workSection.appendChild(imgPopup)
 
     bigImage.style.width = "600px"
@@ -25,13 +28,15 @@ const images = () => { // Збільшуєм зображення при клі�
             imgPopup.style.display = 'flex'
             const path = target.parentNode.getAttribute('href')
             bigImage.setAttribute('src',path)
-            
+            document.body.style.overflow = "hidden"
+            document.body.style.marginRight = `${scroll}px`
         }
 
         if (target && target.matches('div.popup')) // Click за межі картинки
             {
                 imgPopup.style.display = 'none'
-
+                document.body.style.overflow = ""
+                document.body.style.marginRight = `0px`
             }
     })
 

@@ -16,7 +16,8 @@ function postStaticToElems(state,btnCalcValidate,elem,prop,i=0) {
                 })
                 
             }else{
-                
+                elem[0].value = ""
+                elem[0].value = ""
                 btnCalcValidate.setAttribute("disabled", "true");
                 state[prop] = "" // Дивитись урок 007
                     }
@@ -41,6 +42,7 @@ const changeModalState = (state) => {
     const trigger = document.querySelectorAll(".popup_calc_btn")
     trigger.forEach(item => {
         item.addEventListener("click" , (event) => {
+            
             postStaticToElems(state,btnCalcValidate,windowForm,'form')
             postStaticToElems(state,btnCalcValidate,windowHeight,'height')
             postStaticToElems(state,btnCalcValidate,windowWidth,'width')
@@ -98,8 +100,10 @@ const changeModalState = (state) => {
                                 btnCalcValidate.setAttribute("disabled", "true");
                                 }
                             else if (state['height'] != "" && state['width'] != ""){
+                                try{
                                 btnCalcValidate.removeAttribute("disabled");
-                                div.remove()
+                                div.remove() }
+                                catch(e) {}
                             }
                         }
                         break

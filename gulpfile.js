@@ -5,8 +5,8 @@ const webpack = require("webpack-stream");
 const browsersync = require("browser-sync");
 var chmod = require('gulp-chmod');
 var clearReadOnly = require('gulp-clear-readonly');
-//const dist = "./dist/";
-const dist = "D:/MAMP/htdocs/classic_style___JS"
+const dist = "./dist/";
+//const dist = "D:/MAMP/htdocs/classic_style___JS"
 gulp.task("copy-html",async () => {
     return gulp.src("./src/index.html")
                 .pipe(gulp.dest(dist))
